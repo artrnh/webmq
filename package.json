@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack-dev-server --color --progress",
         "build": "cross-env NODE_ENV=production webpack --color --progress",
-        "start": "serve dist"
+        "start": "serve build"
     },
     "author": "artrnh",
     "license": "MIT",
