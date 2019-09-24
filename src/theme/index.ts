@@ -2,8 +2,11 @@ import {DefaultTheme} from 'styled-components';
 
 const theme: DefaultTheme = {
     colors: {
-        background: 'darkslategray',
-        text: 'indianred'
+        dark: '#282828',
+        primaryRed: '#C3073F',
+        secondaryRed: '#950740',
+        darkRed: '#6F2232',
+        grey: '#4E4E50'
     }
 };
 

@@ -43,7 +43,8 @@ class WebmStore implements IWebmStore {
             R.reject(R.isEmpty),
             R.unnest,
             R.filter(({name}) => R.test(/.(webm|mp4)$/, name)),
-            R.dropRepeats
+            R.dropRepeats,
+            R.sort(() => Math.random() - 0.5)
         )(webmThreads);
 
         runInAction(() => {
@@ -53,11 +54,15 @@ class WebmStore implements IWebmStore {
 
     @action.bound
     prevWebm(): void {
+        if (this.cursor === 0) return;
+
         this.cursor -= 1;
     }
 
     @action.bound
     nextWebm(): void {
+        if (this.cursor === this.webms.length - 1) return;
+
         this.cursor += 1;
     }
 }

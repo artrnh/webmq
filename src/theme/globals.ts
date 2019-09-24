@@ -12,7 +12,7 @@ export default createGlobalStyle`
     }
 
     body {
-        font-family: Georgia;
-        background: darkslategray;
+        font-family: monospace;
+        background: #282828;
     }
 `;
