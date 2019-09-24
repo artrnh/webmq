@@ -10,7 +10,7 @@ const config = {
         index: './src/core/index.tsx'
     },
     output: {
-        path: resolve(__dirname, 'build'),
+        path: resolve(__dirname, 'public'),
         filename: '[name].js'
     },
     resolve: {

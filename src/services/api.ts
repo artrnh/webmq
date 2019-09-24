@@ -14,7 +14,8 @@ interface ISingleThreadResponse {
     };
 }
 
-const instance = axios.create({baseURL: 'https://2ch.hk/b'});
+const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+const instance = axios.create({baseURL: `${corsProxy}https://2ch.hk/b`});
 
 export const getThreads = (): Promise<AxiosResponse> =>
     instance.get('/threads.json');
