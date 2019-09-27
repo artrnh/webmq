@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {RouteComponentProps} from '@reach/router';
 import {observer} from 'mobx-react';
@@ -13,24 +13,43 @@ import {Wrapper, Video, Name} from './styled';
 
 const Player: React.FC<RouteComponentProps> = observer(() => {
     const store = useWebmStore();
+    const videoRef = useRef(null);
+
+    const handleSpacePause = (): void => {
+        if (!videoRef.current) return;
+
+        const video = (videoRef.current as unknown) as HTMLVideoElement;
+
+        if (video.paused) video.play();
+        else video.pause();
+    };
+
+    const handleKeyDown = (e: KeyboardEvent): void => {
+        switch (e.code) {
+            case 'ArrowRight':
+                store.nextWebm();
+                break;
+
+            case 'ArrowLeft':
+                store.prevWebm();
+                break;
+
+            case 'Space':
+                handleSpacePause();
+                break;
+
+            default:
+                break;
+        }
+    };
 
     useEffect(() => {
         store.getWebms();
 
-        document.addEventListener('keydown', (e: KeyboardEvent) => {
-            switch (e.key) {
-                case 'ArrowRight':
-                    store.nextWebm();
-                    break;
+        document.addEventListener('keydown', handleKeyDown);
 
-                case 'ArrowLeft':
-                    store.prevWebm();
-                    break;
-
-                default:
-                    break;
-            }
-        });
+        return (): void =>
+            document.removeEventListener('keydown', handleKeyDown);
     }, []);
 
     if (!store.webms.length) return <Loader />;
@@ -44,7 +63,7 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
 
     return (
         <Wrapper>
-            <Video key={store.cursor} autoPlay controls>
+            <Video key={store.cursor} ref={videoRef} autoPlay controls>
                 <source src={src} />
             </Video>
 
