@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 
 import {RouteComponentProps} from '@reach/router';
-import {observer} from 'mobx-react';
+import {observer, useLocalStore} from 'mobx-react';
 import url from 'url';
 
 import {useWebmStore} from 'stores/hooks';
@@ -14,6 +14,14 @@ import {Wrapper, Video, Name} from './styled';
 const Player: React.FC<RouteComponentProps> = observer(() => {
     const store = useWebmStore();
     const videoRef = useRef(null);
+    const player = useLocalStore(() => ({
+        volume: 1,
+        setVolume(): void {
+            const video = (videoRef.current as unknown) as HTMLVideoElement;
+
+            player.volume = video.volume;
+        }
+    }));
 
     const handleSpacePause = (): void => {
         if (!videoRef.current) return;
@@ -52,6 +60,13 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
             document.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    useEffect(() => {
+        if (!videoRef.current) return;
+
+        const video = (videoRef.current as unknown) as HTMLVideoElement;
+        video.volume = player.volume;
+    });
+
     if (!store.webms.length) return <Loader />;
 
     const webm = store.webms[store.cursor];
@@ -63,7 +78,14 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
 
     return (
         <Wrapper>
-            <Video key={store.cursor} ref={videoRef} autoPlay controls>
+            <Video
+                key={store.cursor}
+                ref={videoRef}
+                preload="auto"
+                onVolumeChange={player.setVolume}
+                autoPlay
+                controls
+            >
                 <source src={src} />
             </Video>
 
