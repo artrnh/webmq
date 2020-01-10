@@ -14,6 +14,7 @@ import {Wrapper, Video, Name} from './styled';
 const Player: React.FC<RouteComponentProps> = observer(() => {
     const store = useWebmStore();
     const videoRef = useRef(null);
+
     const player = useLocalStore(() => ({
         volume: 1,
         setVolume(): void {
@@ -23,13 +24,10 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
         }
     }));
 
-    const handleSpacePause = (): void => {
-        if (!videoRef.current) return;
-
+    const focusVideo = (): void => {
         const video = (videoRef.current as unknown) as HTMLVideoElement;
 
-        if (video.paused) video.play();
-        else video.pause();
+        video.focus();
     };
 
     const handleKeyDown = (e: KeyboardEvent): void => {
@@ -42,11 +40,9 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
                 store.prevWebm();
                 break;
 
-            case 'Space':
-                handleSpacePause();
-                break;
-
             default:
+                focusVideo();
+
                 break;
         }
     };
@@ -64,7 +60,9 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
         if (!videoRef.current) return;
 
         const video = (videoRef.current as unknown) as HTMLVideoElement;
+
         video.volume = player.volume;
+        focusVideo();
     });
 
     if (!store.webms.length) return <Loader />;
@@ -83,6 +81,7 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
                 ref={videoRef}
                 preload="auto"
                 onVolumeChange={player.setVolume}
+                loop={store.looping}
                 autoPlay
                 controls
             >
@@ -91,7 +90,7 @@ const Player: React.FC<RouteComponentProps> = observer(() => {
 
             <Name>{webm.fullname}</Name>
 
-            <Controls />
+            <Controls focusVideo={focusVideo} />
         </Wrapper>
     );
 });

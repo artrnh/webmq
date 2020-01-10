@@ -1,5 +1,6 @@
 import {observable, action, runInAction} from 'mobx';
 import R from 'ramda';
+import url from 'url';
 
 import {api} from 'services';
 import {getThreadIds} from 'utils';
@@ -9,10 +10,13 @@ import {IWebm} from 'stores/models/Webm';
 export interface IWebmStore {
     webms: IWebm[];
     cursor: number;
+    looping: boolean;
 
     getWebms(): Promise<void>;
     prevWebm(): void;
     nextWebm(): void;
+    copyLink(): void;
+    switchLooping(): void;
 }
 
 class WebmStore implements IWebmStore {
@@ -21,6 +25,9 @@ class WebmStore implements IWebmStore {
 
     @observable
     public cursor = 0;
+
+    @observable
+    public looping = false;
 
     @action.bound
     async getWebms(): Promise<void> {
@@ -64,6 +71,24 @@ class WebmStore implements IWebmStore {
         if (this.cursor === this.webms.length - 1) return;
 
         this.cursor += 1;
+    }
+
+    @action.bound
+    copyLink(): void {
+        const webm: IWebm = this.webms[this.cursor];
+
+        const link = url.format({
+            protocol: 'https',
+            hostname: '2ch.hk',
+            pathname: webm.path
+        });
+
+        navigator.clipboard.writeText(link);
+    }
+
+    @action.bound
+    switchLooping(): void {
+        this.looping = !this.looping;
     }
 }
 

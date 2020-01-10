@@ -1,6 +1,11 @@
 import styled, {css} from 'styled-components';
 
-export const Wrapper = styled.button`
+interface IWrapperProps {
+    active?: boolean;
+    disabled?: boolean;
+};
+
+export const Wrapper = styled.button<IWrapperProps>`
     margin: 0 10px;
     padding: 15px;
 
@@ -30,5 +35,10 @@ export const Wrapper = styled.button`
             background-color: ${props => props.theme.colors.primaryRed};
             box-shadow: none;
         }
+    `}
+
+    ${props => props.active && css`
+        background-color: ${props => props.theme.colors.secondaryRed};
+        box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.1);
     `}
 `;

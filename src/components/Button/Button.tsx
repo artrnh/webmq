@@ -1,18 +1,16 @@
-import React from 'react';
+import React, {MouseEvent, FocusEvent} from 'react';
 
 import {Wrapper} from './styled';
 
 interface IProps {
-    onClick: () => void;
-    disabled: boolean;
+    onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+    onFocus?: (e: FocusEvent<HTMLButtonElement>) => void;
+    disabled?: boolean;
+    active?: boolean;
 }
 
-const Button: React.FC<IProps> = ({children, onClick, disabled, ...rest}) => {
-    return (
-        <Wrapper onClick={onClick} disabled={disabled} {...rest}>
-            {children}
-        </Wrapper>
-    );
+const Button: React.FC<IProps> = ({children, ...rest}) => {
+    return <Wrapper {...rest}>{children}</Wrapper>;
 };
 
 export default Button;
