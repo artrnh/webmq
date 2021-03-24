@@ -17,7 +17,8 @@ interface ISingleThreadResponse {
 
 const corsProxy = url.format({
     protocol: 'https',
-    hostname: 'cors-anywhere.herokuapp.com'
+    hostname: 'thingproxy.freeboard.io',
+    pathname: '/fetch'
 });
 
 const dvachUrl = url.format({
