@@ -40,8 +40,6 @@ class WebmStore implements IWebmStore {
         const webmThreads = await Promise.all(promises);
 
         const webms = R.pipe(
-            // @ts-ignore: Thx for beautiful ramda typings,
-            // which forces me to use ts-ignore (somehow typings don't work in pipelines)
             R.map(R.path(['data', 'threads'])),
             R.map(R.head),
             R.pluck('posts'),
