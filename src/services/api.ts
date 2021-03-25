@@ -17,8 +17,7 @@ interface ISingleThreadResponse {
 
 const corsProxy = url.format({
     protocol: 'https',
-    hostname: 'thingproxy.freeboard.io',
-    pathname: '/fetch'
+    hostname: 'cors.bridged.cc'
 });
 
 const dvachUrl = url.format({
